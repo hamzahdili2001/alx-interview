@@ -1,11 +1,13 @@
 #!/usr/bin/python3
-"""0-pascal_triangle.py"""
+"""
+0-pascal_triangle.py
+"""
 
 
 def pascal_triangle(n):
     """
-     function that returns a list of lists of integers representing
-     the Pascal’s triangle of n
+    function that returns a list of lists of integers representing
+    the Pascal’s triangle of n
 
     Args:
         n (int): The number of rows to generate in the Pascal's triangle.
