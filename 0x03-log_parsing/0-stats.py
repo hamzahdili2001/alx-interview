@@ -15,41 +15,38 @@ def print_stats(status_count, total_size):
             print("{:s}: {:d}".format(code, status_count[code]))
 
 
-try:
-    count = 0
-    total_size = 0
-    status_counts = {
-        "200": 0,
-        "301": 0,
-        "400": 0,
-        "401": 0,
-        "403": 0,
-        "404": 0,
-        "405": 0,
-        "500": 0,
-    }
+count = 0
+size = 0
+status_counts = {
+    "200": 0,
+    "301": 0,
+    "400": 0,
+    "401": 0,
+    "403": 0,
+    "404": 0,
+    "405": 0,
+    "500": 0,
+}
 
-    with sys.stdin as f:
+try:
+    with open(0) as f:
         for line in f:
             count += 1
-            parts = line.split()
+            arr = line.split()
             try:
-                file_size = int(parts[-1])
-                total_size += file_size
-            except ValueError:
+                size += int(arr[-1])
+            except:
                 pass
-
             try:
-                status_code = parts[-2]
-                if status_code in status_counts:
-                    status_counts[status_code] += 1
-            except IndexError:
+                status = arr[-2]
+                if status in status_counts:
+                    status_counts[status] += 1
+            except:
                 pass
-
             if count % 10 == 0:
-                print_stats(status_counts, total_size)
-        print_stats(status_counts, total_size)
+                print_stats(status_counts, size)
+        print_stats(status_counts, size)
 
 except KeyboardInterrupt:
-    print_stats(status_counts, total_size)
+    print_stats(status_counts, size)
     raise
