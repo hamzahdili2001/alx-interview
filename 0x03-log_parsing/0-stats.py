@@ -1,23 +1,8 @@
 #!/usr/bin/python3
-"""0-states.py"""
-
-
+"""0-stats.py"""
 import sys
 
-
-def print_stats(status_count, total_size):
-    """function that prints statistics"""
-    sorted_codes = sorted(status_count.keys())
-    print("Total file size: {:d}".format(total_size))
-
-    for code in sorted_codes:
-        if status_count[code] != 0:
-            print("{:s}: {:d}".format(code, status_count[code]))
-
-
-count = 0
-size = 0
-status_counts = {
+stats = {
     "200": 0,
     "301": 0,
     "400": 0,
@@ -27,26 +12,30 @@ status_counts = {
     "405": 0,
     "500": 0,
 }
+sizes = [0]
+
+
+def print_stats():
+    print("File size: {}".format(sum(sizes)))
+    for s_code, count in sorted(stats.items()):
+        if count:
+            print("{}: {}".format(s_code, count))
+
 
 try:
-    with open(0) as f:
-        for line in f:
-            count += 1
-            arr = line.split()
-            try:
-                size += int(arr[-1])
-            except:
-                pass
-            try:
-                status = arr[-2]
-                if status in status_counts:
-                    status_counts[status] += 1
-            except:
-                pass
-            if count % 10 == 0:
-                print_stats(status_counts, size)
-        print_stats(status_counts, size)
-
+    for i, line in enumerate(sys.stdin, start=1):
+        matches = line.rstrip().split()
+        try:
+            status_code = matches[-2]
+            file_size = matches[-1]
+            if status_code in stats.keys():
+                stats[status_code] += 1
+            sizes.append(int(file_size))
+        except Exception:
+            pass
+        if i % 10 == 0:
+            print_stats()
+    print_stats()
 except KeyboardInterrupt:
-    print_stats(status_counts, size)
+    print_stats()
     raise
