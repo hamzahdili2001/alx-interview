@@ -31,7 +31,7 @@ def validUTF8(data):
             elif b >> 3 == 0b11110:
                 n_b = 3
             elif b >> 7 == 0:
-                n_b = 0
+                continue
             else:
                 return False
         else:
