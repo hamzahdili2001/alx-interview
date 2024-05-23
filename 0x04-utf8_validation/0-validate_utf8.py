@@ -9,34 +9,31 @@ def validUTF8(data):
     encoding
     """
 
-    def is_continuation(b):
+    def count_of_bytes(n):
         """
-        helper function checks
-        if a byte is a valid
-        continuation byte
+        Determines the number of leading 1 bits in the byte (n).
         """
-        return 128 <= b <= 191
-
-    n_b = 0
-
-    for b in data:
-        if b > 255:
-            return False
-
-        if n_b == 0:
-            if b >> 5 == 0b110:
-                n_b = 1
-            elif b >> 4 == 0b1110:
-                n_b = 2
-            elif b >> 3 == 0b11110:
-                n_b = 3
-            elif b >> 7 == 0:
-                continue
+        count = 0
+        for i in range(7, -1, -1):
+            if (n >> i) & 1:
+                count += 1
             else:
-                return False
-        else:
-            if not is_continuation(b):
-                return False
-            n_b -= 1
+                break
+        return count
 
-    return n_b == 0
+    remaining_bytes = 0
+
+    for byte in data:
+        if remaining_bytes == 0:
+            leading_ones = count_of_bytes(byte)
+            if leading_ones == 0:
+                continue
+            if leading_ones == 1 or leading_ones > 4:
+                return False
+            remaining_bytes = leading_ones - 1
+        else:
+            if count_of_bytes(byte) != 1:
+                return False
+            remaining_bytes -= 1
+
+    return remaining_bytes == 0
