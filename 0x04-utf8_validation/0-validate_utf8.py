@@ -20,10 +20,13 @@ def validUTF8(data):
     n_b = 0
 
     for b in data:
+        if b > 255:
+            return False
+
         if n_b == 0:
-            if b >> 0 == 0b110:
+            if b >> 5 == 0b110:
                 n_b = 1
-            elif b >> 0 == 0b1110:
+            elif b >> 4 == 0b1110:
                 n_b = 2
             elif b >> 3 == 0b11110:
                 n_b = 3
